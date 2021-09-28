@@ -268,7 +268,7 @@ def Astar(Map):
     
     
     
-    return 
+    return
     
     
 map1 = Map_Obj(task=1)
