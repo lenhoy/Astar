@@ -1,5 +1,4 @@
-from pandas.core.construction import array
-from pandas.core.dtypes.missing import array_equivalent
+import numpy as np
 import pygame
 import math
 import pandas as pd
@@ -25,11 +24,17 @@ TURQUOISE = (64, 224, 208) # Start node
 # Create python enviroment based on handout Map 
 class Map:
     def __init__(self, task=1):
+        """Initializing map values. Noe Start has value 10 and Goal value 20
+
+        Args:
+            task (int, optional): Select task 1-5. Defaults to 1.
+        """
         self.start_pos, self.goal_pos, self.end_goal_pos, self.path_to_map = self.fill_critical_positions(task)
         self.mapArray = self.read_map(self.path_to_map)
-        #self.tmp_cell_value = self.get_cell_value(self.goal_pos)
-        #self.set_cell_value(self.start_pos, ' S ')
-        #self.set_cell_value(self.goal_pos, ' G ')
+        self.tmp_cell_value = self.get_cell_value(self.goal_pos)
+        self.set_cell_value(self.start_pos, 10)
+        self.set_cell_value(self.goal_pos, 20)
+        print(self.mapArray)
         #self.tick_counter = 0
 
 
@@ -80,11 +85,18 @@ class Map:
 
         return start_pos, goal_pos, end_goal_pos, path_to_map
     
+    def set_cell_value(self, pos, value):
+        self.mapArray[pos[0], pos[1]] = value
+    
+    def get_cell_value(self, pos):
+        return self.mapArray[pos[0], pos[1]]
+            
     def get_map(self):
-        """Should return the map array, but gives out bound method something...
+        """Returns a 2d array of values for the map nodes.
+        Transposes the returnes array
 
         Returns:
-            [type]: [description]
+            Array[[int]]: [description]
         """
         return self.mapArray
     
@@ -109,8 +121,8 @@ class Node:
         #Width/height here references to the drawn cubes
         #x, y are the coordinates taking the width of a cube into account
         # NOTE: make width=height for normal, rectangular cubes in the grid
-        self.x = row * width
-        self.y = col * height
+        self.x = col * width
+        self.y = row * height
         self.color = WHITE
         self.neighbours = []
         self.width = width
@@ -133,7 +145,7 @@ class Node:
     def is_start(self):
         return self.color == TURQUOISE
 
-    def is_end(self):
+    def is_goal(self):
         return self.color == GREEN
     
     def is_reset(self):
@@ -152,10 +164,10 @@ class Node:
     def make_start(self):
         self.color = TURQUOISE
 
-    def make_end(self):
+    def make_goal(self):
         self.color = GREEN
     
-    def make_reset(self):
+    def make_flatGround(self):
         self.color = WHITE
         
     def make_path(self):
@@ -197,7 +209,49 @@ def make_grid(rows, cols, width):
 
 # Function for defining node colors based on CSV file / map
 def color_nodes(grid, map):
-    pass
+    """Loop through grid and apply values from map file
+
+    Args:
+        grid (Array[[Node]]): [description]
+        map (obj): [description]
+
+    Returns:
+        2d array: the grid with updated nodes
+    """
+    
+    mapArray = map.get_map() # gives 2d[int] array
+            
+    for gridRow, CSVRow in zip(grid, mapArray): # Going through the rows
+        for node_x, CSVvalue in zip(gridRow, CSVRow): # Going through the columns
+            color_node(node_x, CSVvalue)
+    
+    return grid
+
+def color_node(node, value):
+    """Applies the correct color value to a node
+
+    Args:
+        node (obj): node object
+        value (int): value corresponding to a color
+
+    Returns:
+        [type]: [description]
+    """
+    
+    if value == -1: # Barrier
+        node.make_barrier()
+    elif value == 1: # Flat
+        node.make_flatGround()
+    elif value == 2: # Stairs
+        pass
+    elif value == 3: # Packed Stairs
+        pass
+    elif value == 4: # Packed room
+        pass
+    elif value == 10: # Start
+        node.make_start()
+    elif value == 20: # Goal
+        node.make_goal()
          
 # Function for drawing the gridlines
 def draw_grid(win, rows, cols, width, height):
@@ -213,7 +267,7 @@ def draw_grid(win, rows, cols, width, height):
 
 # Main draw function for drawing map
 def draw(win, grid, rows, cols, width, height):
-    win.fill(WHITE)
+    #win.fill(WHITE)
     
     for row in grid:
         for node in row:
@@ -222,11 +276,11 @@ def draw(win, grid, rows, cols, width, height):
     
     draw_grid(win, rows, cols, width, height)
     pygame.display.update()
-    
-    
+       
 # For interactivity - find mouseclick position
-def get_clicked_pos(pos, rows, width):
-    """Find the clicked position in terms of rows and columns
+def get_clicked_pos(pos, rows, width):   
+    """Find the clicked position in terms of rows and columns.
+        # TODO: Fix this function, registrers wrong node
 
     Args:
         pos ([type]): pygame mouse clicked position
@@ -236,6 +290,7 @@ def get_clicked_pos(pos, rows, width):
     Returns:
         (int, int): touple of indexer
     """
+    
     gap = width // rows
     y, x = pos
     
@@ -243,8 +298,6 @@ def get_clicked_pos(pos, rows, width):
     col = x // gap
     
     return row, col
-    
-    
     
 #heuristic function
 def h(p1, p2):
@@ -260,7 +313,6 @@ def h(p1, p2):
     x1, y1 = p1
     x2, y2 = p2
     return abs(x1 - x2) + abs(y1 - y2)
-     
      
 #The actual algorithm 
 def Astar(Map):
@@ -294,6 +346,11 @@ def main(win, width, height, map):
     goal = map.get_goal_pos
     
     grid = make_grid(ROWS, COLS, width) # note width is used to calculate the gap
+    
+    
+    # Color the nodes according to the CSV file
+    grid = color_nodes(grid, map)
+    
     
     # are we running the main loop currently
     run = True
@@ -343,7 +400,7 @@ def main(win, width, height, map):
 
 #Select map 1
 map = Map(task=1)
-
+print(map.get_map())
 #Set a scale factor for the pygame window
 SCALE = 15
 
