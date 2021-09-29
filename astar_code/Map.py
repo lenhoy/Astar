@@ -239,38 +239,9 @@ class Map_Obj():
         # Show image
         image.show()
   
-def h(p1, p2):
-    """Heuristic function calculating the Manhattan distance between two points
 
-    Args:
-        p1 (touple[int]): [description]
-        p2 (touple[int]): [description]
-
-    Returns:
-        int: The manhattan ("L") distance between the two points
-    """
-    x1, y1 = p1
-    x2, y2 = p2
-    return abs(x1 - x2) + abs(y1 - y2)
-      
-def Astar(Map):
-    
-    # import Heapq - priority queue
-    
-    # Naboer
-    
-    # Get start point
-    # Liste for frontier
-    #Markere ting som visited
-    #beregne f score og gscore
-    #Huske "parent", hvor vi kom fra - trengs for å lage path tilslutt
-    # Finne ut hvordan man kan finne naboen til pos i mappet
-    
-    
-    
-    return
-    
     
 map1 = Map_Obj(task=1)
 #map1.print_map(map1.get_maps())
 map1.show_map()
+
