@@ -17,9 +17,11 @@ WHITE = (255, 255, 255) # Unvisited node
 BLACK = (0, 0, 0) # Barrier
 PURPLE = (128, 0, 128) # Path
 ORANGE = (255, 165, 0) # Frontier
-GREY = (128, 128, 128)
 TURQUOISE = (64, 224, 208) # Start node
-
+GREY1 = (50,50,50)
+GREY2 = (100,100,100)
+GREY3= (128, 128, 128)
+GREY4 = (200,200,200)
 
 # Create python enviroment based on handout Map 
 class Map:
@@ -143,7 +145,7 @@ class Node:
         return self.color == BLACK
 
     def is_start(self):
-        return self.color == TURQUOISE
+        return self.color == BLUE
 
     def is_goal(self):
         return self.color == GREEN
@@ -162,7 +164,7 @@ class Node:
         self.color = BLACK
 
     def make_start(self):
-        self.color = TURQUOISE
+        self.color = BLUE
 
     def make_goal(self):
         self.color = GREEN
@@ -260,10 +262,10 @@ def draw_grid(win, rows, cols, width, height):
     # Draw the Horizontal and Vertical lines of the Grid
     for i in range(rows):
         # Horizontal
-        pygame.draw.line(win, GREY, (0, i * gap), (width, i * gap))
+        pygame.draw.line(win, GREY3, (0, i * gap), (width, i * gap))
         for j in range(cols):
             # Vertical
-            pygame.draw.line(win, GREY, (j * gap, 0), (j * gap, height))
+            pygame.draw.line(win, GREY3, (j * gap, 0), (j * gap, height))
 
 # Main draw function for drawing map
 def draw(win, grid, rows, cols, width, height):
@@ -278,21 +280,21 @@ def draw(win, grid, rows, cols, width, height):
     pygame.display.update()
        
 # For interactivity - find mouseclick position
-def get_clicked_pos(pos, rows, width):   
+def get_clicked_pos(pos, cols, width):   
     """Find the clicked position in terms of rows and columns.
         # TODO: Fix this function, registrers wrong node
 
     Args:
         pos ([type]): pygame mouse clicked position
-        rows ([type]): amount of rows in map
+        cols ([type]): amount of cols in map
         width ([type]): width of map
 
     Returns:
         (int, int): touple of indexer
     """
     
-    gap = width // rows
-    y, x = pos
+    gap = width // cols
+    x, y = pos
     
     row = y // gap
     col = x // gap
@@ -372,7 +374,7 @@ def main(win, width, height, map):
             
             if pygame.mouse.get_pressed()[0]: # On left mouse click
                 pos = pygame.mouse.get_pos()
-                row, col = get_clicked_pos(pos, ROWS, width)
+                row, col = get_clicked_pos(pos, COLS, width)
                 node = grid[row][col] # The clicked node
                 
                 # If start node is not defined, first click defines start node
