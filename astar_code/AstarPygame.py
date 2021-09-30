@@ -68,27 +68,27 @@ class Map:
             start_pos = [27, 18]
             goal_pos = [40, 32]
             end_goal_pos = goal_pos
-            path_to_map = 'Samfundet_map_1.csv'
+            path_to_map = 'astar_code/Samfundet_map_1.csv'
         elif task == 2:
             start_pos = [40, 32]
             goal_pos = [8, 5]
             end_goal_pos = goal_pos
-            path_to_map = 'Samfundet_map_1.csv'
+            path_to_map = 'astar_code/Samfundet_map_1.csv'
         elif task == 3:
             start_pos = [28, 32]
             goal_pos = [6, 32]
             end_goal_pos = goal_pos
-            path_to_map = 'Samfundet_map_2.csv'
+            path_to_map = 'astar_code/Samfundet_map_2.csv'
         elif task == 4:
             start_pos = [28, 32]
             goal_pos = [6, 32]
             end_goal_pos = goal_pos
-            path_to_map = 'Samfundet_map_Edgar_full.csv'
+            path_to_map = 'astar_code/Samfundet_map_Edgar_full.csv'
         elif task == 5:
             start_pos = [14, 18]
             goal_pos = [6, 36]
             end_goal_pos = [6, 7]
-            path_to_map = 'Samfundet_map_2.csv'
+            path_to_map = 'astar_code/Samfundet_map_2.csv'
 
         return start_pos, goal_pos, end_goal_pos, path_to_map
 
@@ -209,16 +209,31 @@ class Node:
 
 
 def Astar(draw, grid, start, goal):
+    """Runs the Astar algorithm, updates the nodes and draws them
+
+    Args:
+        draw (func): the draw function
+        grid (Array[[node]]): The grid of nodes
+        start (int,int): Coordinate touple
+        goal (int,int): Coordinate touple
+
+    Returns:
+        Bool: False if no solution found
+    """
+    
+    startNode = grid[start[0]][start[1]] # Gets the start node
+    goalNode = grid[goal[0]][goal[1]] # Gets the goal node
+    
     count = 0
     open_set = PriorityQueue()
-    open_set.put((0, count, start))
+    open_set.put((0, count, startNode))
     came_from = {}
     g_score = {node: float("inf") for row in grid for node in row}
-    g_score[start] = 0
+    g_score[startNode] = 0
     f_score = {node: float("inf") for row in grid for node in row}
-    f_score[start] = h(start.get_pos(), goal.get_pos())
+    f_score[startNode] = h(startNode.get_pos(), goalNode.get_pos())
 
-    open_set_hash = {start}  # check if the item is in the Priority Queue
+    open_set_hash = {startNode}  # check if the item is in the Priority Queue
 
     while not open_set.empty():
         for event in pygame.event.get():
@@ -231,7 +246,8 @@ def Astar(draw, grid, start, goal):
         # make sure we don't have any duplicates
         open_set_hash.remove(current)
 
-        if current == goal:
+        if current == goalNode:
+            current.make_goal()
             return True
 
         for neighbour in current.neighbours:
@@ -242,7 +258,7 @@ def Astar(draw, grid, start, goal):
                 came_from[neighbour] = current
                 g_score[neighbour] = temp_g_score
                 f_score[neighbour] = temp_g_score + \
-                    h(neighbour.get_pos(), goal.get_pos())
+                    h(neighbour.get_pos(), goalNode.get_pos())
                 if neighbour not in open_set_hash:
                     count += 1
                     open_set.put((f_score[neighbour], count, neighbour))
@@ -251,7 +267,7 @@ def Astar(draw, grid, start, goal):
 
         draw()
 
-        if current != start:
+        if current != startNode:
             current.make_interior()
 
     return False                # did not find a path
@@ -397,25 +413,6 @@ def h(p1, p2):
     x2, y2 = p2
     return abs(x1 - x2) + abs(y1 - y2)
 
-# The actual algorithm
-
-
-def Astar(Map):
-
-    # import Heapq - priority queue
-
-    # Naboer
-
-    # Get start point
-    # Liste for frontier
-    # Markere ting som visited
-    # beregne f score og gscore
-    # Huske "parent", hvor vi kom fra - trengs for å lage path tilslutt
-    # Finne ut hvordan man kan finne naboen til pos i mappet
-
-    return
-
-
 def main(win, WIDTH, HEIGHT, map):
 
     ROWS = map.get_rows()
@@ -487,8 +484,12 @@ def main(win, WIDTH, HEIGHT, map):
                     # start algorithm on space key
                     for row in grid:
                         for node in row:
-                            node.update_neighbours()
-                    Astar(lambda: draw(win, grid, ROWS, width), grid, start, goal)
+                            node.update_neighbours(grid)
+                    Astar(lambda: draw(win, grid, ROWS, COLS, WIDTH, HEIGHT), grid, start, goal)
+
+
+                if event.key == pygame.K_r:
+                    grid = color_nodes(grid, map)
 
     pygame.quit()
 
