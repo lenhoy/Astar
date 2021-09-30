@@ -21,10 +21,10 @@ BLACK = (0, 0, 0)  # Barrier
 PURPLE = (128, 0, 128)  # Path
 ORANGE = (255, 165, 0)  # Frontier
 TURQUOISE = (64, 224, 208)  # Start node
-GREY1 = (50, 50, 50)
-GREY2 = (100, 100, 100)
-GREY3 = (128, 128, 128)
-GREY4 = (200, 200, 200)
+GREY4 = (50, 50, 50)
+GREY3 = (100, 100, 100)
+GREY2 = (128, 128, 128)
+GREY1 = (200, 200, 200)
 
 # Create python enviroment based on handout Map
 
@@ -68,27 +68,27 @@ class Map:
             start_pos = [27, 18]
             goal_pos = [40, 32]
             end_goal_pos = goal_pos
-            path_to_map = 'astar_code/Samfundet_map_1.csv'
+            path_to_map = 'Samfundet_map_1.csv'
         elif task == 2:
             start_pos = [40, 32]
             goal_pos = [8, 5]
             end_goal_pos = goal_pos
-            path_to_map = 'astar_code/Samfundet_map_1.csv'
+            path_to_map = 'Samfundet_map_1.csv'
         elif task == 3:
             start_pos = [28, 32]
             goal_pos = [6, 32]
             end_goal_pos = goal_pos
-            path_to_map = 'astar_code/Samfundet_map_2.csv'
+            path_to_map = 'Samfundet_map_2.csv'
         elif task == 4:
             start_pos = [28, 32]
             goal_pos = [6, 32]
             end_goal_pos = goal_pos
-            path_to_map = 'astar_code/Samfundet_map_Edgar_full.csv'
+            path_to_map = 'Samfundet_map_Edgar_full.csv'
         elif task == 5:
             start_pos = [14, 18]
             goal_pos = [6, 36]
             end_goal_pos = [6, 7]
-            path_to_map = 'astar_code/Samfundet_map_2.csv'
+            path_to_map = 'Samfundet_map_2.csv'
 
         return start_pos, goal_pos, end_goal_pos, path_to_map
 
@@ -136,9 +136,13 @@ class Node:
         self.height = height
         self.total_rows = total_rows
         self.total_cols = total_cols
+        self.weight = 0
 
     def get_pos(self):
         return self.row, self.col
+    
+    def get_weight(self):
+        return self.weight
 
     # Methods for checking status of node
     def is_interior(self):  # closed
@@ -151,13 +155,22 @@ class Node:
         return self.color == BLACK
 
     def is_start(self):
-        return self.color == BLUE
+        return self.color == TURQUOISE
 
     def is_goal(self):
         return self.color == GREEN
 
     def is_flatGround(self):
         return self.color == WHITE
+    
+    def is_Stairs(self):
+        return self.color == GREY1
+
+    def is_pStairs(self):
+        return self.color == GREY2
+
+    def is_pRoom(self):
+        return self.color == GREY4
 
     # Methods for changing status of node
     def make_interior(self):
@@ -170,16 +183,29 @@ class Node:
         self.color = BLACK
 
     def make_start(self):
-        self.color = BLUE
+        self.color = TURQUOISE
 
     def make_goal(self):
         self.color = GREEN
 
     def make_flatGround(self):
         self.color = WHITE
+        self.weight = 1
 
     def make_path(self):
         self.color = PURPLE
+
+    def make_Stairs(self):
+        self.color = GREY1
+        self.weight = 2
+
+    def make_pStairs(self):
+        self.color = GREY2
+        self.weight = 3
+
+    def make_pRoom(self):
+        self.color = GREY4
+        self.weight = 4
 
     # Method to draw node/cube
 
@@ -207,6 +233,19 @@ class Node:
     def __lt__(self, other):
         return False
 
+
+def reconstruct_path(came_from, current, draw):
+    """
+
+    Args:
+        came_from (List): List keeping track of where we came from
+        current (Node): goalNode
+        draw (func): Function
+    """
+    while current in came_from:
+        current = came_from[current]
+        current.make_path()
+        draw()
 
 def Astar(draw, grid, start, goal):
     """Runs the Astar algorithm, updates the nodes and draws them
@@ -247,12 +286,15 @@ def Astar(draw, grid, start, goal):
         open_set_hash.remove(current)
 
         if current == goalNode:
+            reconstruct_path(came_from, current, draw)  #draw the path at the end        
             current.make_goal()
+            grid[start[0]][start[1]].make_start()
             return True
 
         for neighbour in current.neighbours:
-            temp_g_score = g_score[current] + \
-                1         # +1 because of neighbour
+            print("Current, Neighbour-weights", current.get_weight(), neighbour.get_weight()) # Testing purposes TODO remove
+            print("Current g_score", g_score[current]) # Testing purposes TODO remove
+            temp_g_score = g_score[current] + neighbour.get_weight()
 
             if temp_g_score < g_score[neighbour]:
                 came_from[neighbour] = current
@@ -334,11 +376,11 @@ def color_node(node, value):
     elif value == 1:  # Flat
         node.make_flatGround()
     elif value == 2:  # Stairs
-        pass
+        node.make_Stairs()
     elif value == 3:  # Packed Stairs
-        pass
+        node.make_pStairs()
     elif value == 4:  # Packed room
-        pass
+        node.make_pRoom()
     elif value == 10:  # Start
         node.make_start()
     elif value == 20:  # Goal
@@ -497,9 +539,9 @@ def main(win, WIDTH, HEIGHT, map):
 # Initializing pygame and selecting map
 
 # Select map 1
-map = Map(task=1)
+map = Map(task=4)
 # print(map.get_map())
-# Set a scale factor for the pygame window
+# Set a scale factor for the pygame windows
 SCALE = 15
 
 WIDTH = map.get_cols() * SCALE
