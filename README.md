@@ -22,7 +22,7 @@ Below the main function all the way down there you can choose the task number. I
 When the program is running, right click to make nodes white. 
 
 Left click to color nodes black.
-If there is no start or goal node yet, this will first color nodes as start (blue) and goal (green) nodes.
+If there is no start or goal node yet, this will first color nodes as start (turquoise) and goal (green) nodes.
 
 Press `spacekey` to run the A* algorithm
 
