@@ -24,6 +24,8 @@ When the program is running, right click to make nodes white.
 Left click to color nodes black.
 If there is no start or goal node yet, this will first color nodes as start (turquoise) and goal (green) nodes.
 
+`Keys 1-4` to change between tasks
+
 Press `spacekey` to run the A* algorithm
 
 Press `r` to reset back to the map corresponding to the chosen tasknumber
