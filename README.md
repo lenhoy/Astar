@@ -32,7 +32,3 @@ Press `r` to reset back to the map corresponding to the chosen tasknumber
 You might have to edit the paths inside the `fill_critical_positions` function.
 
 Depending on operating system you might have to add/remove `"astar_code/"` at the start of the paths
-## Todos
-- [ ] add greyscale to color_nodes function
-- [ ] add greyscale weights into f score
-- [ ] add keypress 1-5? to quickly change map and task
