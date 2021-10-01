@@ -530,8 +530,31 @@ def main(win, WIDTH, HEIGHT, map):
                     Astar(lambda: draw(win, grid, ROWS, COLS, WIDTH, HEIGHT), grid, start, goal)
 
 
-                if event.key == pygame.K_r:
+                if event.key == pygame.K_r: #Reset map to map default
                     grid = color_nodes(grid, map)
+                
+                #Select maps/tasks 
+                if event.key == pygame.K_1:
+                    map = select_map(1)
+                    start = map.get_start_pos()
+                    goal = map.get_goal_pos()
+                    grid = color_nodes(grid, map)
+                if event.key == pygame.K_2:
+                    map = select_map(2)
+                    start = map.get_start_pos()
+                    goal = map.get_goal_pos()
+                    grid = color_nodes(grid, map)
+                if event.key == pygame.K_3:
+                    map = select_map(3)
+                    start = map.get_start_pos()
+                    goal = map.get_goal_pos()
+                    grid = color_nodes(grid, map)
+                if event.key == pygame.K_4:
+                    map = select_map(4)
+                    start = map.get_start_pos()
+                    goal = map.get_goal_pos()
+                    grid = color_nodes(grid, map)
+                
 
     pygame.quit()
 
@@ -539,8 +562,10 @@ def main(win, WIDTH, HEIGHT, map):
 # Initializing pygame and selecting map
 
 # Select map 1
-map = Map(task=4)
-# print(map.get_map())
+def select_map(task=1):
+    map = Map(task)
+    return map
+map = select_map()
 # Set a scale factor for the pygame windows
 SCALE = 15
 
