@@ -1,5 +1,5 @@
 # Astar
-Implementation of the A* algorithm
+Implementation of the A* algorithm based on https://www.youtube.com/watch?v=JtiK0DOeI4A&t=4499s
 
 
 ## Setup
