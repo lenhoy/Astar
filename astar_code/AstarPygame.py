@@ -289,11 +289,12 @@ def Astar(draw, grid, start, goal):
             reconstruct_path(came_from, current, draw)  #draw the path at the end        
             current.make_goal()
             grid[start[0]][start[1]].make_start()
+            print(f"The Quickest path has a f-score of {f_score[current]}")
             return True
 
         for neighbour in current.neighbours:
-            print("Current, Neighbour-weights", current.get_weight(), neighbour.get_weight()) # Testing purposes TODO remove
-            print("Current g_score", g_score[current]) # Testing purposes TODO remove
+            #print("Current, Neighbour-weights", current.get_weight(), neighbour.get_weight()) # Testing purposes TODO remove
+            #print("Current g_score", g_score[current]) # Testing purposes TODO remove
             temp_g_score = g_score[current] + neighbour.get_weight()
 
             if temp_g_score < g_score[neighbour]:
