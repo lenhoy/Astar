@@ -42,10 +42,7 @@ class Map:
         self.tmp_cell_value = self.get_cell_value(self.goal_pos)
         self.set_cell_value(self.start_pos, 10)
         self.set_cell_value(self.goal_pos, 20)
-<<<<<<< HEAD
-=======
         # print(self.mapArray)
->>>>>>> 5e3d4899edb389d552f28ea74f4a8a0e3d6681d4
         #self.tick_counter = 0
 
     def read_map(self, path):
@@ -67,31 +64,32 @@ class Map:
         Returns:
             touple: (start_pos->Array, goal_pos->Array, end_goal_pos->Array, path_to_map->Str)
         """
+        # Might have to adjust to fit your system
         if task == 1:
             start_pos = [27, 18]
             goal_pos = [40, 32]
             end_goal_pos = goal_pos
-            path_to_map = 'Samfundet_map_1.csv'
+            path_to_map = 'astar_code/Samfundet_map_1.csv'
         elif task == 2:
             start_pos = [40, 32]
             goal_pos = [8, 5]
             end_goal_pos = goal_pos
-            path_to_map = 'Samfundet_map_1.csv'
+            path_to_map = 'astar_code/Samfundet_map_1.csv'
         elif task == 3:
             start_pos = [28, 32]
             goal_pos = [6, 32]
             end_goal_pos = goal_pos
-            path_to_map = 'Samfundet_map_2.csv'
+            path_to_map = 'astar_code/Samfundet_map_2.csv'
         elif task == 4:
             start_pos = [28, 32]
             goal_pos = [6, 32]
             end_goal_pos = goal_pos
-            path_to_map = 'Samfundet_map_Edgar_full.csv'
+            path_to_map = 'astar_code/Samfundet_map_Edgar_full.csv'
         elif task == 5:
             start_pos = [14, 18]
             goal_pos = [6, 36]
             end_goal_pos = [6, 7]
-            path_to_map = 'Samfundet_map_2.csv'
+            path_to_map = 'astar_code/Samfundet_map_2.csv'
 
         return start_pos, goal_pos, end_goal_pos, path_to_map
 
@@ -139,12 +137,8 @@ class Node:
         self.height = height
         self.total_rows = total_rows
         self.total_cols = total_cols
-<<<<<<< HEAD
-        
-=======
         self.weight = 0
 
->>>>>>> 5e3d4899edb389d552f28ea74f4a8a0e3d6681d4
     def get_pos(self):
         return self.row, self.col
     
@@ -166,11 +160,6 @@ class Node:
 
     def is_goal(self):
         return self.color == GREEN
-<<<<<<< HEAD
-    
-=======
-
->>>>>>> 5e3d4899edb389d552f28ea74f4a8a0e3d6681d4
     def is_flatGround(self):
         return self.color == WHITE
     
@@ -228,20 +217,6 @@ class Node:
         self.neighbours = []
         # DOWN
         if self.row < self.total_rows - 1 and not grid[self.row + 1][self.col].is_barrier():
-<<<<<<< HEAD
-            self.neighbours.append(grid[self.row + 1 ][self.col])
-        #UP
-        if self.col > 0 and not grid[self.row - 1][self.col].is_barrier():
-            self.neighbours.append(grid[self.row - 1 ][self.col])
-        #RIGHT
-        if self.row < self.total_col - 1 and not grid[self.row][self.col + 1].is_barrier():
-            self.neighbours.append(grid[self.row][self.col + 1])
-        #LEFT
-        if self.col > 0 and not grid[self.row][self.col - 1].is_barrier():
-            self.neighbours.append(grid[self.row][self.col - 1])
-    
-    # Less than, for comparing two nodes 
-=======
             self.neighbours.append(grid[self.row + 1][self.col])
 
         if self.row > 0 and not grid[self.row - 1][self.col].is_barrier():  # UP
@@ -255,7 +230,6 @@ class Node:
             self.neighbours.append(grid[self.row][self.col - 1])
 
     # Less than, for comparing two nodes
->>>>>>> 5e3d4899edb389d552f28ea74f4a8a0e3d6681d4
     def __lt__(self, other):
         return False
 
@@ -349,11 +323,7 @@ def make_grid(rows, cols, WIDTH):
     Args:
         rows (int): amount of rows
         cols (int): amount of cols
-<<<<<<< HEAD
-        WIDTH (int): the calculated WIDTH with regard to cube size
-=======
         WIDTH (int): the calculated width with regard to cube size
->>>>>>> 5e3d4899edb389d552f28ea74f4a8a0e3d6681d4
         height (int): the calculated height with regard to cube size
     Returns:
         2d Array: Array of node objects
@@ -419,17 +389,11 @@ def color_node(node, value):
         node.make_goal()
 
 # Function for drawing the gridlines
-<<<<<<< HEAD
-def draw_grid(win, rows, cols, WIDTH, HEIGHT):
-    gap = WIDTH // cols
-    
-=======
 
 
 def draw_grid(win, rows, cols, WIDTH, HEIGHT):
     gap = WIDTH // cols
 
->>>>>>> 5e3d4899edb389d552f28ea74f4a8a0e3d6681d4
     # Draw the Horizontal and Vertical lines of the Grid
     for i in range(rows):
         # Horizontal
@@ -439,37 +403,22 @@ def draw_grid(win, rows, cols, WIDTH, HEIGHT):
             pygame.draw.line(win, GREY3, (j * gap, 0), (j * gap, HEIGHT))
 
 # Main draw function for drawing map
-<<<<<<< HEAD
-def draw(win, grid, rows, cols, WIDTH, HEIGHT):
-    win.fill(WHITE)
-    
-=======
 
 
 def draw(win, grid, rows, cols, WIDTH, HEIGHT):
     # win.fill(WHITE)
 
->>>>>>> 5e3d4899edb389d552f28ea74f4a8a0e3d6681d4
     for row in grid:
         for node in row:
             # Draw each individual node
             node.draw(win)
-<<<<<<< HEAD
-    
-=======
-
->>>>>>> 5e3d4899edb389d552f28ea74f4a8a0e3d6681d4
     draw_grid(win, rows, cols, WIDTH, HEIGHT)
     pygame.display.update()
 
 # For interactivity - find mouseclick position
-<<<<<<< HEAD
-def get_clicked_pos(pos, cols, WIDTH):   
-=======
 
 
 def get_clicked_pos(pos, cols, WIDTH):
->>>>>>> 5e3d4899edb389d552f28ea74f4a8a0e3d6681d4
     """Find the clicked position in terms of rows and columns.
         # TODO: Fix this function, registrers wrong node
 
@@ -481,11 +430,6 @@ def get_clicked_pos(pos, cols, WIDTH):
     Returns:
         (int, int): touple of indexer
     """
-<<<<<<< HEAD
-    
-=======
-
->>>>>>> 5e3d4899edb389d552f28ea74f4a8a0e3d6681d4
     gap = WIDTH // cols
     x, y = pos
 
@@ -513,22 +457,6 @@ def h(p1, p2):
 
 def main(win, WIDTH, HEIGHT, map):
 
-<<<<<<< HEAD
-def main(win, WIDTH, HEIGHT, map):
-    
-    ROWS = map.get_rows()
-    COLS = map.get_cols()
-    #print(f"Rows: {ROWS}, Cols: {COLS}")
-    
-    #Positions
-    start = map.get_start_pos()
-    goal = map.get_goal_pos()
-
-    
-    grid = make_grid(ROWS, COLS, WIDTH) # note WIDTH is used to calculate the gap
-    
-    
-=======
     ROWS = map.get_rows()
     COLS = map.get_cols()
     #print(f"Rows: {ROWS}, Cols: {COLS}")
@@ -542,7 +470,6 @@ def main(win, WIDTH, HEIGHT, map):
     # note WIDTH is used to calculate the gap
     grid = make_grid(ROWS, COLS, WIDTH)
 
->>>>>>> 5e3d4899edb389d552f28ea74f4a8a0e3d6681d4
     # Color the nodes according to the CSV file
     grid = color_nodes(grid, map)
 
@@ -567,19 +494,6 @@ def main(win, WIDTH, HEIGHT, map):
             if pygame.mouse.get_pressed()[0]:  # On left mouse click
                 pos = pygame.mouse.get_pos()
                 row, col = get_clicked_pos(pos, COLS, WIDTH)
-<<<<<<< HEAD
-                node = grid[row][col] # The clicked node
-                
-                # If start node is not defined, first click defines start node
-                if not start and not node.is_goal():
-                    node.make_start()
-                    start = node.get_pos()
-                    
-                elif not goal and not node.is_start(): # same for goal
-                    node.make_goal()
-                    goal = node.get_pos()
-                    
-=======
                 node = grid[row][col]  # The clicked node
 
                 # If start node is not defined, first click defines start node
@@ -591,7 +505,6 @@ def main(win, WIDTH, HEIGHT, map):
                     goal = node.get_pos()
                     node.make_goal()
 
->>>>>>> 5e3d4899edb389d552f28ea74f4a8a0e3d6681d4
                 # If start and goal are defined, left click makes node a barrier
                 elif not node.is_goal() and not node.is_start():
                     node.make_barrier()
@@ -620,28 +533,6 @@ def main(win, WIDTH, HEIGHT, map):
                 if event.key == pygame.K_r: #Reset map to map default
                     grid = color_nodes(grid, map)
                 
-<<<<<<< HEAD
-            elif pygame.mouse.get_pressed()[2]: # On right mouse click 
-                pos = pygame.mouse.get_pos()
-                row, col = get_clicked_pos(pos, COLS, WIDTH)
-                node = grid[row][col] # The clicked node
-                
-                if node.is_start():
-                    start = None
-                elif node.is_goal():
-                    goal = None 
-            
-                node.make_flatGround()
-                
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_SPACE and not started:
-                    #start alg on space keydown
-                    for row in grid:
-                        for node in row:
-                            node.update_neighbours()
-                    
-                    Astar(lambda: draw(win, grid, s))
-=======
                 #Select maps/tasks 
                 if event.key == pygame.K_1:
                     map = select_map(1)
@@ -665,25 +556,17 @@ def main(win, WIDTH, HEIGHT, map):
                     grid = color_nodes(grid, map)
                 
 
->>>>>>> 5e3d4899edb389d552f28ea74f4a8a0e3d6681d4
     pygame.quit()
 
 
 # Initializing pygame and selecting map
 
-<<<<<<< HEAD
-#Select map 1
-map = Map(task=1)
-
-#Set a scale factor for the pygame window
-=======
 # Select map 1
 def select_map(task=1):
     map = Map(task)
     return map
 map = select_map()
 # Set a scale factor for the pygame windows
->>>>>>> 5e3d4899edb389d552f28ea74f4a8a0e3d6681d4
 SCALE = 15
 
 WIDTH = map.get_cols() * SCALE
